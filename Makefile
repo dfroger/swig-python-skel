@@ -3,6 +3,8 @@ UNAME := $(shell uname)
 SHARED_LIB := _$(PROG).so
 CFLAGS := -O3 -Wall -g -fPIC
 PYTHON_INCLUDES := $(shell python-config --includes)
+PYTHON_PREFIX := $(shell python-config --prefix)
+PYTHON_LIBS := $(shell python-config --libs)
 
 all: $(PROG) swig test-python
 
@@ -24,7 +26,7 @@ endif
 
 $(SHARED_LIB): $(PROG) $(PROG)_wrap.c $(PROG)_wrap.o
 ifeq ($(UNAME), Darwin)
-	$(CC) $(SHLIB_FLAGS) $(CFLAGS) $(PYTHON_INCLUDES) -o $@ $(PROG)_wrap.o -lpython
+	$(CC) $(SHLIB_FLAGS) $(CFLAGS) $(PYTHON_INCLUDES) -o $@ $(PROG)_wrap.o -L$(PYTHON_PREFIX)/lib $(PYTHON_LIB)
 else
 	$(CC) $(SHLIB_FLAGS) $(CFLAGS) -o $@ $(PROG)_wrap.o
 endif
